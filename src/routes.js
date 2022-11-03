@@ -4,8 +4,10 @@ import { Routes, Route } from 'react-router-dom'
 import Login from './containers/Login'
 import Clients from './containers/Clients'
 import Files from './containers/Files'
+import Messages from './containers/Messages'
 import { CurrentUserContext } from './contexts/currentUser'
 import { CategoriesProvider } from './contexts/categories'
+import { MessageProvider } from './contexts/messages'
 
 const AuthRouter = () => {
   return (
@@ -19,12 +21,15 @@ const AuthRouter = () => {
 const UserRouter = () => {
   return (
     <CategoriesProvider>
-      <Routes>
-        <Route path="/clients" element={<Clients />} />
-        <Route path="/files/:id" element={<Files />} />
-        <Route path="/files" element={<Files />} />
-        <Route path="/" element={<Clients />} />
-      </Routes>
+      <MessageProvider>
+        <Routes>
+          <Route path='/clients' element={<Clients />} />
+          <Route path='/files/:id' element={<Files />} />
+          <Route path='/files' element={<Files />} />
+          <Route path='/messages' element={<Messages />} />
+          <Route path='/' element={<Clients />} />
+        </Routes>
+      </MessageProvider>
     </CategoriesProvider>
   )
 }

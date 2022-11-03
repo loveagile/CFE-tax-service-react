@@ -12,7 +12,12 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material'
-import { MoreVert, KeyboardArrowDown, KeyboardArrowUp, NoteAdd } from '@mui/icons-material'
+import {
+  MoreVert,
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+  NoteAdd,
+} from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 import download from 'downloadjs'
@@ -36,7 +41,7 @@ const formatText = (str) => {
 }
 
 const CategoryRow = (props) => {
-  const { row, setUploadOpen, flag, setFlag } = props
+  const { row, setUploadOpen, flag, setFlag, type } = props
   const [anchorEl, setAnchorEl] = useState(null)
   const [open, setOpen] = useState(false)
   const [infoOpen, setInfoOpen] = useState(false)
@@ -53,7 +58,7 @@ const CategoryRow = (props) => {
       click: () => {
         setCategoryOpen(true)
         handleCategoryClose()
-      }
+      },
     },
     {
       key: 'Delete',
@@ -61,8 +66,8 @@ const CategoryRow = (props) => {
         setConfirmOpen(true)
         setConfirmType('category')
         handleCategoryClose()
-      }
-    }
+      },
+    },
   ]
   const options = [
     {
@@ -71,20 +76,22 @@ const CategoryRow = (props) => {
         setFileInfo(file)
         setInfoOpen(true)
         handleClose()
-      }
+      },
     },
     {
       key: 'Rename',
-      click: () => { }
+      click: () => {},
     },
     {
       key: 'Download',
       click: async (file) => {
         const token = localStorage.getItem('token')
-        const res = await fetch(`${BASE_URL}/files/download/${file.name}`, { headers: { "Authorization": `Bearer ${token}` } })
+        const res = await fetch(`${BASE_URL}/files/download/${file.name}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         const blob = await res.blob()
         download(blob, file.name)
-      }
+      },
     },
     {
       key: 'Delete',
@@ -92,7 +99,7 @@ const CategoryRow = (props) => {
         setConfirmOpen(true)
         setConfirmType('file')
         handleClose()
-      }
+      },
     },
   ]
 
@@ -104,17 +111,21 @@ const CategoryRow = (props) => {
 
   const handleDelete = (type) => {
     if (type === 'category') {
-      deleteCategory(row).then(() => {
-        setFlag(!flag)
-      }).catch(err => {
-        toast.error(err.error)
-      })
+      deleteCategory(row)
+        .then(() => {
+          setFlag(!flag)
+        })
+        .catch((err) => {
+          toast.error(err.error)
+        })
     } else {
-      deleteFile(row.files[currentRow]).then(() => {
-        setFlag(!flag)
-      }).catch(err => {
-        toast.error(err.error)
-      })
+      deleteFile(row.files[currentRow])
+        .then(() => {
+          setFlag(!flag)
+        })
+        .catch((err) => {
+          toast.error(err.error)
+        })
     }
   }
 
@@ -127,119 +138,152 @@ const CategoryRow = (props) => {
     <>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
-          <IconButton aria-label="expand" size="small" onClick={() => setOpen(!open)}>
+          <IconButton
+            aria-label='expand'
+            size='small'
+            onClick={() => setOpen(!open)}
+          >
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </TableCell>
-        <TableCell>
-          {row?.name}
-        </TableCell>
-        <TableCell align="center">
-          {row?.files?.length || '0'}
-        </TableCell>
-        <TableCell align="center">
+        <TableCell>{row?.name}</TableCell>
+        <TableCell align='center'>{row?.files?.length || '0'}</TableCell>
+        <TableCell
+          align='center'
+          sx={{ display: type === 'From' ? 'block' : 'none' }}
+        >
           <IconButton
-            id="category"
-            aria-label="category"
+            id='category'
+            aria-label='category'
             aria-controls={categoryOpen ? 'category_action' : undefined}
-            aria-haspopup={true}
+            aria-haspopup={+true}
             aria-expanded={categoryOpen ? 'true' : undefined}
             onClick={(event) => handleCategoryAction(event)}
           >
             <MoreVert />
           </IconButton>
           {
-            <Menu id="category_action" open={Boolean(categoryEl)} onClose={handleCategoryClose} anchorEl={categoryEl} MenuListProps={{
-              'aria-labelledby': 'action'
-            }}>
-              {
-                actions.map(action => (
-                  <MenuItem
-                    key={action.key}
-                    onClick={action.click}
-                  >
-                    {action.key}
-                  </MenuItem>
-                ))
-              }
+            <Menu
+              id='category_action'
+              open={Boolean(categoryEl)}
+              onClose={handleCategoryClose}
+              anchorEl={categoryEl}
+              MenuListProps={{
+                'aria-labelledby': 'action',
+              }}
+            >
+              {actions.map((action, index) => (
+                <MenuItem
+                  key={action.key}
+                  sx={{
+                    padding:
+                      type === 'To' && index === 1 ? '20px !important' : '',
+                  }}
+                  onClick={action.click}
+                >
+                  {action.key}
+                </MenuItem>
+              ))}
             </Menu>
           }
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: '0px', paddingTop: '0px' }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
+        <TableCell
+          style={{ paddingBottom: '0px', paddingTop: '0px' }}
+          colSpan={6}
+        >
+          <Collapse in={open} timeout='auto' unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="h6" gutterBottom component="div">
+                <Typography variant='h6' gutterBottom component='div'>
                   Files
                 </Typography>
-                <IconButton onClick={() => setUploadOpen(true)}><NoteAdd /></IconButton>
+                <IconButton
+                  sx={{ display: type === 'From' ? 'block' : 'none' }}
+                  onClick={() => setUploadOpen(true)}
+                >
+                  <NoteAdd />
+                </IconButton>
               </Box>
-              <Table size="small" aria-label="files">
+              <Table size='small' aria-label='files'>
                 <TableHead>
                   <TableRow>
                     <FileCell>Name</FileCell>
-                    <FileCell align="center">Type</FileCell>
-                    <FileCell align="center">Size</FileCell>
-                    <FileCell align="center">Date</FileCell>
-                    <FileCell align="center">Action</FileCell>
+                    <FileCell align='center'>Type</FileCell>
+                    <FileCell align='center'>Size</FileCell>
+                    <FileCell align='center'>Date</FileCell>
+                    <FileCell align='center'>Action</FileCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row && row.files && row.files.map(((file, fileIndex) => (
-                    <TableRow key={file._id}>
-                      <FileCell component="th" scope="row" align="left">
-                        {formatText(file.name)}
-                      </FileCell>
-                      <FileCell align="center">
-                        {file.type}
-                      </FileCell>
-                      <FileCell align="right">
-                        {file.size}
-                      </FileCell>
-                      <FileCell align="center">
-                        {file.downloaded_at}
-                      </FileCell>
-                      <FileCell align="center">
-                        <IconButton
-                          id="action"
-                          aria-label="action"
-                          aria-controls={open ? 'file_action' : undefined}
-                          aria-haspopup={true}
-                          aria-expanded={open ? 'true' : undefined}
-                          onClick={(event) => handleClick(event, fileIndex)}
-                        >
-                          <MoreVert />
-                        </IconButton>
-                        {
-                          fileIndex === currentRow && <Menu id="file_action" open={openAction} onClose={handleClose} anchorEl={anchorEl} MenuListProps={{
-                            'aria-labelledby': 'action'
-                          }}>
-                            {
-                              options.map(option => (
+                  {row &&
+                    row.files &&
+                    row.files.map((file, fileIndex) => (
+                      <TableRow key={file._id}>
+                        <FileCell component='th' scope='row' align='left'>
+                          {formatText(file.name)}
+                        </FileCell>
+                        <FileCell align='center'>{file.type}</FileCell>
+                        <FileCell align='right'>{file.size}</FileCell>
+                        <FileCell align='center'>{file.downloaded_at}</FileCell>
+                        <FileCell align='center'>
+                          <IconButton
+                            id='action'
+                            aria-label='action'
+                            aria-controls={open ? 'file_action' : undefined}
+                            aria-haspopup={+true}
+                            aria-expanded={open ? 'true' : undefined}
+                            onClick={(event) => handleClick(event, fileIndex)}
+                          >
+                            <MoreVert />
+                          </IconButton>
+                          {fileIndex === currentRow && (
+                            <Menu
+                              id='file_action'
+                              open={openAction}
+                              onClose={handleClose}
+                              anchorEl={anchorEl}
+                              MenuListProps={{
+                                'aria-labelledby': 'action',
+                              }}
+                            >
+                              {options.map((option) => (
                                 <MenuItem
                                   key={option.key}
                                   onClick={() => option.click(file)}
                                 >
                                   {option.key}
                                 </MenuItem>
-                              ))
-                            }
-                          </Menu>
-                        }
-                      </FileCell>
-                    </TableRow>
-                  )))}
+                              ))}
+                            </Menu>
+                          )}
+                        </FileCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
-      <ConfirmModal open={confirmOpen} setOpen={setConfirmOpen} title="Delete" content={`Do you want to delete a ${confirmType}?`} handleDelete={() => handleDelete(confirmType)} />
-      <InfoModal open={infoOpen} setOpen={setInfoOpen} file={fileInfo}></InfoModal>
-      <RenameFolderModal open={categoryOpen} setOpen={setCategoryOpen} category={{ _id: row._id, name: row.name }} />
+      <ConfirmModal
+        open={confirmOpen}
+        setOpen={setConfirmOpen}
+        title='Delete'
+        content={`Do you want to delete a ${confirmType}?`}
+        handleDelete={() => handleDelete(confirmType)}
+      />
+      <InfoModal
+        open={infoOpen}
+        setOpen={setInfoOpen}
+        file={fileInfo}
+      ></InfoModal>
+      <RenameFolderModal
+        open={categoryOpen}
+        setOpen={setCategoryOpen}
+        category={{ _id: row._id, name: row.name }}
+      />
     </>
   )
 }
