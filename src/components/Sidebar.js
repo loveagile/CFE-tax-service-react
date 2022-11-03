@@ -23,7 +23,7 @@ const Sidebar = () => {
     },
     {
       name: 'Messenger',
-      url: '/messenger',
+      url: '/messages',
     },
   ]
   const value = useContext(CurrentUserContext)
