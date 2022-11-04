@@ -3,13 +3,16 @@ import { BrowserRouter } from 'react-router-dom'
 
 import Layout from './components/Layout'
 import Router from './routes'
+import { CurrentUserProvider } from './contexts/currentUser'
 
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
-      <Layout>
-        <Router />
-      </Layout>
+      <CurrentUserProvider>
+        <Layout>
+          <Router />
+        </Layout>
+      </CurrentUserProvider>
     </BrowserRouter>
   )
 }
