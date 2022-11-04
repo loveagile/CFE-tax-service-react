@@ -17,7 +17,8 @@ const MessageItem = (props) => {
         sx={{
           maxWidth: '60%',
           minWidth: '0px !important',
-          backgroundColor: '#004c9a',
+          backgroundColor: sender ? '#fff' : '#555',
+          color: sender ? '#000' : '#fff',
           '& .MuiSnackbarContent-message': {
             marginLeft: sender ? 'auto' : '',
           },
