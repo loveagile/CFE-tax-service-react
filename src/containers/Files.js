@@ -184,6 +184,8 @@ const Files = (req) => {
         current={current}
         setCurrent={setCurrent}
         categories={categoryValue?.categories}
+        flag={flag}
+        setFlag={setFlag}
       />
       <AddFolderModal open={addFolder} setOpen={setAddFolder} />
     </Box>
