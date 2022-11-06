@@ -18,6 +18,13 @@ export const getClients = () => {
   })
 }
 
+export const createClient = (data) => {
+  const token = localStorage.getItem('token')
+  return axios.post(`${BASE_URL}/users`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
 export const getCategories = (id) => {
   const token = localStorage.getItem('token')
   if (id) {
