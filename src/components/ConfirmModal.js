@@ -1,5 +1,11 @@
 import React from 'react'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material'
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from '@mui/material'
 
 const ConfirmModal = (props) => {
   const { title, content, open, setOpen, handleDelete } = props
@@ -12,11 +18,18 @@ const ConfirmModal = (props) => {
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={() => {
-          handleDelete()
-          handleCancel()
-        }}>Delete</Button>
-        <Button variant="outlined" onClick={handleCancel}>Cancel</Button>
+        <Button
+          variant='contained'
+          onClick={() => {
+            handleDelete()
+            handleCancel()
+          }}
+        >
+          Delete
+        </Button>
+        <Button variant='outlined' onClick={handleCancel}>
+          Cancel
+        </Button>
       </DialogActions>
     </Dialog>
   )

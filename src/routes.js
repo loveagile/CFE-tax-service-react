@@ -8,6 +8,7 @@ import Messages from './containers/Messages'
 import { CurrentUserContext } from './contexts/currentUser'
 import { CategoriesProvider } from './contexts/categories'
 import { MessageProvider } from './contexts/messages'
+import { ClientProvider } from './contexts/clients'
 
 const AuthRouter = () => {
   return (
@@ -22,13 +23,15 @@ const UserRouter = () => {
   return (
     <CategoriesProvider>
       <MessageProvider>
-        <Routes>
-          <Route path='/clients' element={<Clients />} />
-          <Route path='/files/:id' element={<Files />} />
-          <Route path='/files' element={<Files />} />
-          <Route path='/messages' element={<Messages />} />
-          <Route path='/' element={<Clients />} />
-        </Routes>
+        <ClientProvider>
+          <Routes>
+            <Route path='/clients' element={<Clients />} />
+            <Route path='/files/:id' element={<Files />} />
+            <Route path='/files' element={<Files />} />
+            <Route path='/messages' element={<Messages />} />
+            <Route path='/' element={<Clients />} />
+          </Routes>
+        </ClientProvider>
       </MessageProvider>
     </CategoriesProvider>
   )
