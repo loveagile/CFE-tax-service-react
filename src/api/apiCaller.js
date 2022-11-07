@@ -25,6 +25,20 @@ export const createClient = (data) => {
   })
 }
 
+export const updateClient = (data) => {
+  const token = localStorage.getItem('token')
+  return axios.put(`${BASE_URL}/users/${data._id}`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
+export const deleteClient = (id) => {
+  const token = localStorage.getItem('token')
+  return axios.delete(`${BASE_URL}/users/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
 export const getCategories = (id) => {
   const token = localStorage.getItem('token')
   if (id) {
