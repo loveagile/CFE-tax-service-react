@@ -10,13 +10,10 @@ export const ClientProvider = ({ children }) => {
     list.push(data)
     setClients(list)
   }
+
   const updateClient = (data) => {
     const list = clients.map((client) => {
-      if (client._id === data?.data?.user?._id) {
-        return data?.data?.user
-      } else {
-        return client
-      }
+      return client._id === data?._id ? data : client
     })
     setClients(list)
   }
