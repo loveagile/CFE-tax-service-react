@@ -61,7 +61,7 @@ const Files = (req) => {
       .catch((err) => {
         toast.error(err.error)
       })
-  }, [flag])
+  }, [flag, id])
 
   return (
     <Box sx={{ width: '100%', overflow: 1, marginTop: '50px' }}>
