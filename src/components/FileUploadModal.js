@@ -18,13 +18,11 @@ import { CategoriesContext } from '../contexts/categories'
 import { uploadFiles } from '../api/apiCaller'
 
 const FileUploadModal = (props) => {
-  const { open, setOpen, categories, selected, flag, setFlag } = props
+  const { open, setOpen, categories, folder, flag, setFlag } = props
   const [files, setFiles] = useState([])
   const userId = useParams().id
   const value = useContext(CategoriesContext)
-  const [category, setCategory] = useState(
-    selected || (categories && categories[0])
-  )
+  const [category, setCategory] = useState(categories && categories[0])
 
   const onFileChange = (event) => {
     let list = []
@@ -44,7 +42,11 @@ const FileUploadModal = (props) => {
     files.forEach((file) => {
       formData.append('files', file)
     })
-    formData.append('category', category._id)
+    if (folder?._id) {
+      formData.append('category', folder?._id)
+    } else {
+      formData.append('category', category?._id)
+    }
     formData.append('to', userId)
 
     uploadFiles(formData)
@@ -71,10 +73,13 @@ const FileUploadModal = (props) => {
       <DialogTitle>Upload files</DialogTitle>
       <Box sx={{ minWidth: '200px', padding: '20px' }}>
         <form onSubmit={handleSubmit}>
-          <FormControl variant='standard' sx={{ width: '100%' }}>
+          <FormControl
+            sx={{ display: folder?._id ? 'none' : '', width: '100%' }}
+            variant='standard'
+          >
             <InputLabel
               id='category-select-label'
-              placeholder='Select a category'
+              placeholder='Select a folder'
             ></InputLabel>
             <Select
               labelId='category-select-label'
