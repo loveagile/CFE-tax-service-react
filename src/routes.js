@@ -5,6 +5,7 @@ import Login from './containers/Login'
 import Clients from './containers/Clients'
 import Files from './containers/Files'
 import Messages from './containers/Messages'
+import Profile from './containers/Profile'
 import { CurrentUserContext } from './contexts/currentUser'
 import { CategoriesProvider } from './contexts/categories'
 import { MessageProvider } from './contexts/messages'
@@ -29,6 +30,7 @@ const UserRouter = () => {
             <Route path='/files/:id' element={<Files />} />
             <Route path='/files' element={<Files />} />
             <Route path='/messages' element={<Messages />} />
+            <Route path='/profile' element={<Profile />} />
             <Route path='/' element={<Clients />} />
           </Routes>
         </ClientProvider>

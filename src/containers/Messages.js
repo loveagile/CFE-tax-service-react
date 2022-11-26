@@ -23,7 +23,7 @@ import { SERVER } from '../config'
 
 const Messages = () => {
   const [receiver, setReceiver] = useState()
-  const value = useContext(MessageContext)
+  const { messages, setMessages } = useContext(MessageContext)
   const userValue = useContext(CurrentUserContext)
   const [content, setContent] = useState('')
   const [users, setUsers] = useState()
@@ -37,25 +37,18 @@ const Messages = () => {
         setReceiver(data?.data?.users[0])
       })
     }
-    configureSocket()
   }, [])
 
   useEffect(() => {
-    if (userValue?.currentUser?.role === 'admin') param = receiver?._id
+    if (userValue.currentUser?.role === 'admin') param = receiver?._id
     getMessages(param)
       .then((data) => {
-        value.setMessages(data?.data?.messages)
+        setMessages([...data?.data?.messages])
       })
       .catch((error) => {
-        toast.error(error.error)
+        toast.error(error.message)
       })
   }, [receiver])
-
-  const configureSocket = () => {
-    socket.on('messages', (message) => {
-      value.addMessage(message)
-    })
-  }
 
   const handleSend = () => {
     const data = {
@@ -65,6 +58,15 @@ const Messages = () => {
       date: new Date(),
     }
     socket.emit('send-message', data)
+    socket.on('new-message', (message) => {
+      getMessages(receiver?._id)
+        .then((data) => {
+          setMessages(data?.data?.messages)
+        })
+        .catch((error) => {
+          toast.error(error.message)
+        })
+    })
     setContent('')
   }
 
@@ -83,31 +85,33 @@ const Messages = () => {
         }}
       >
         <InputLabel id='client-selector'>Client</InputLabel>
-        <Select
-          labelId='client-selector'
-          id='selector'
-          value={receiver}
-          onChange={handleReceiver}
-          label='Client'
-        >
-          {users?.map((user, index) => (
-            <MenuItem value={user} autoFocus={true} key={index}>
-              {`${user.firstname} ${user.lastname}`}{' '}
-            </MenuItem>
-          ))}
-        </Select>
+        {receiver && (
+          <Select
+            labelId='client-selector'
+            id='selector'
+            value={receiver}
+            onChange={handleReceiver}
+            label='Client'
+          >
+            {users?.map((user, index) => (
+              <MenuItem value={user} autoFocus={true} key={index}>
+                {`${user.firstname} ${user.lastname}`}{' '}
+              </MenuItem>
+            ))}
+          </Select>
+        )}
       </FormControl>
       <Stack
         sx={{
           height:
             window.innerHeight -
             (userValue?.currentUser?.role === 'admin' ? 270 : 180),
-          backgroundColor: '#222',
           overflowY: 'auto',
           padding: '10px',
+          paddingRight: '26px',
         }}
       >
-        {value.messages?.map((message, id) => (
+        {messages?.map((message, id) => (
           <MessageItem
             key={id}
             content={message.content}
@@ -115,7 +119,7 @@ const Messages = () => {
           ></MessageItem>
         ))}
       </Stack>
-      <Box sx={{ display: 'flex', padding: '10px' }}>
+      <Box sx={{ display: 'flex', padding: '10px', width: '100%' }}>
         <TextareaAutosize
           maxRows={3}
           minRows={2}
@@ -123,11 +127,12 @@ const Messages = () => {
           placeholder='Write a message'
           value={content}
           sx={{
-            border: '2px solid #fff',
-            paddingLeft: '10px',
             borderRadius: '5px',
             fontSize: '15px',
             color: '#000',
+            border: '1px solid #aaa',
+            paddingLeft: '20px',
+            marginLeft: '10px',
           }}
           style={{ width: window.innerWidth - 350, fontSize: '15px' }}
           onChange={(event) => {

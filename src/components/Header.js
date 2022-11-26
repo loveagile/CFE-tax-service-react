@@ -1,7 +1,8 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Box } from '@mui/material'
+import { Box, Button, Menu, MenuItem } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import { Settings, Logout, MoreVert } from '@mui/icons-material'
 
 import { CurrentUserContext } from '../contexts/currentUser'
 
@@ -14,8 +15,18 @@ const Navbar = styled(Link)`
 `
 
 const Header = () => {
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
   const navigate = useNavigate()
   const value = useContext(CurrentUserContext)
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
   return (
     <Box sx={{ height: '60px', backgroundColor: 'primary.dark' }} color='white'>
@@ -41,22 +52,51 @@ const Header = () => {
           }}
         >
           {localStorage.getItem('token') ? (
-            <p
-              className='pointer-cursor'
-              onClick={() => {
-                localStorage.removeItem('token')
-                value.createCurrentUser({})
-                navigate('/login')
-              }}
-            >
-              Logout
-            </p>
-          ) : (
             <>
-              <Navbar to='/login' sx={{ cursor: 'pointer' }}>
-                Login
-              </Navbar>
+              <Button
+                id='username'
+                sx={{ color: 'white' }}
+                aria-controls={open ? 'username-menu' : undefined}
+                aria-haspopup='true'
+                aria-expanded={open ? 'true' : undefined}
+                endIcon={<MoreVert />}
+                onClick={handleClick}
+              >
+                {value?.currentUser?.username}
+              </Button>
+              <Menu
+                id='username-menu'
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'username',
+                }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    navigate('/profile')
+                  }}
+                >
+                  <Settings sx={{ marginRight: '10px' }} />
+                  Profile
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    localStorage.removeItem('token')
+                    value.createCurrentUser({})
+                    navigate('/login')
+                  }}
+                >
+                  <Logout sx={{ marginRight: '10px' }} />
+                  Logout
+                </MenuItem>
+              </Menu>
             </>
+          ) : (
+            <Navbar to='/login' sx={{ cursor: 'pointer' }}>
+              Login
+            </Navbar>
           )}
         </Box>
       </Box>

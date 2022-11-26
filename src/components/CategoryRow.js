@@ -41,7 +41,7 @@ const formatText = (str) => {
 }
 
 const CategoryRow = (props) => {
-  const { row, setUploadOpen, flag, setFlag, type } = props
+  const { row, setUploadOpen, flag, setFlag, type, setFolder } = props
   const [anchorEl, setAnchorEl] = useState(null)
   const [open, setOpen] = useState(false)
   const [infoOpen, setInfoOpen] = useState(false)
@@ -201,7 +201,13 @@ const CategoryRow = (props) => {
                 </Typography>
                 <IconButton
                   sx={{ display: type === 'From' ? 'block' : 'none' }}
-                  onClick={() => setUploadOpen(true)}
+                  onClick={() => {
+                    setFolder({
+                      _id: row?._id,
+                      name: row?.name,
+                    })
+                    setUploadOpen(true)
+                  }}
                 >
                   <NoteAdd />
                 </IconButton>

@@ -40,8 +40,8 @@ const Files = (req) => {
   const categoryValue = useContext(CategoriesContext)
   const [uploadOpen, setUploadOpen] = useState(false)
   const [addFolder, setAddFolder] = useState(false)
+  const [folder, setFolder] = useState({})
   const [flag, setFlag] = useState(false)
-  const [current, setCurrent] = useState()
   let id = useParams().id || ''
 
   if (value?.currentUser?.role !== 'admin' || !id) {
@@ -61,7 +61,7 @@ const Files = (req) => {
       .catch((err) => {
         toast.error(err.error)
       })
-  }, [flag])
+  }, [flag, id])
 
   return (
     <Box sx={{ width: '100%', overflow: 1, marginTop: '50px' }}>
@@ -76,12 +76,15 @@ const Files = (req) => {
             >
               Add Folder
             </Button>
-            <Typography variant='h5'>Uploaded files</Typography>
+            <Typography variant='h5'>To preparer</Typography>
             <Button
               variant='outlined'
               sx={{ marginBottom: '20px' }}
               startIcon={<FileUpload />}
-              onClick={() => setUploadOpen(true)}
+              onClick={() => {
+                setFolder({ _id: '', name: '' })
+                setUploadOpen(true)
+              }}
             >
               Upload
             </Button>
@@ -106,6 +109,7 @@ const Files = (req) => {
                   <CategoryRow
                     key={file._id}
                     row={file}
+                    setFolder={setFolder}
                     uploadOpen={uploadOpen}
                     setUploadOpen={setUploadOpen}
                     flag={flag}
@@ -130,7 +134,7 @@ const Files = (req) => {
         </Grid>
         <Grid item lg={6} xs={12}>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Typography variant='h5'>Received files</Typography>
+            <Typography variant='h5'>From preparer</Typography>
           </Box>
           <TableContainer
             component={Paper}
@@ -156,6 +160,7 @@ const Files = (req) => {
                     key={file._id}
                     row={file}
                     uploadOpen={uploadOpen}
+                    setFolder={setFolder}
                     setUploadOpen={setUploadOpen}
                     flag={flag}
                     setFlag={setFlag}
@@ -181,8 +186,7 @@ const Files = (req) => {
       <FileUploadModal
         open={uploadOpen}
         setOpen={setUploadOpen}
-        current={current}
-        setCurrent={setCurrent}
+        folder={folder}
         categories={categoryValue?.categories}
         flag={flag}
         setFlag={setFlag}
