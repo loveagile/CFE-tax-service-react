@@ -20,15 +20,26 @@ const Sidebar = () => {
     {
       name: 'Files',
       url: '/files',
+      icon: <InsertDriveFileIcon sx={{ color: 'white' }} />,
+    },
+    {
+      name: 'Profie',
+      url: '/profile',
+      icon: <InsertDriveFileIcon sx={{ color: 'white' }} />,
     },
     {
       name: 'Messenger',
       url: '/messages',
+      icon: <MessageIcon sx={{ color: 'white' }} />,
     },
   ]
   const value = useContext(CurrentUserContext)
   if (value?.currentUser?.role === 'admin') {
-    sides.unshift({ name: 'Clients', url: '/clients' })
+    sides.unshift({
+      name: 'Clients',
+      url: '/clients',
+      icon: <PeopleAltIcon sx={{ color: 'white' }} />,
+    })
   } else if (!value.currentUser || !localStorage.getItem('token')) {
     return <></>
   }
@@ -54,13 +65,7 @@ const Sidebar = () => {
           >
             <ListItemButton>
               <ListItemIcon sx={{ marginLeft: '10px' }} on>
-                {side.name === 'Clients' ? (
-                  <PeopleAltIcon sx={{ color: 'white' }} />
-                ) : side.name === 'Files' ? (
-                  <InsertDriveFileIcon sx={{ color: 'white' }} />
-                ) : (
-                  <MessageIcon sx={{ color: 'white' }} />
-                )}
+                {side?.icon}
               </ListItemIcon>
               <ListItemText
                 primary={side.name}

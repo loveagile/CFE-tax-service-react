@@ -4,9 +4,37 @@ import { BASE_URL } from '../config'
 
 export const login = (user) => axios.post(`${BASE_URL}/auth/login`, user)
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = () => {
   const token = localStorage.getItem('token')
   return axios.get(`${BASE_URL}/auth/currentuser`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
+export const getDependents = () => {
+  const token = localStorage.getItem('token')
+  return axios.get(`${BASE_URL}/dependents`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
+export const createDependent = (dependent) => {
+  const token = localStorage.getItem('token')
+  return axios.post(`${BASE_URL}/dependents`, dependent, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
+export const updateDependent = (dependent) => {
+  const token = localStorage.getItem('token')
+  return axios.put(`${BASE_URL}/dependents/${dependent._id}`, dependent, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
+export const deleteDependent = (dependent) => {
+  const token = localStorage.getItem('token')
+  return axios.delete(`${BASE_URL}/dependents/${dependent._id}`, {
     headers: { Authorization: `Bearer ${token}` },
   })
 }
