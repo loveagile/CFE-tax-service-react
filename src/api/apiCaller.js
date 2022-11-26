@@ -11,6 +11,20 @@ export const getCurrentUser = () => {
   })
 }
 
+export const getProfile = () => {
+  const token = localStorage.getItem('token')
+  return axios.get(`${BASE_URL}/profile`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
+export const createProfile = (profile) => {
+  const token = localStorage.getItem('token')
+  return axios.post(`${BASE_URL}/profile`, profile, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
 export const getDependents = () => {
   const token = localStorage.getItem('token')
   return axios.get(`${BASE_URL}/dependents`, {
