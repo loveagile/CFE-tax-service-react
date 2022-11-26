@@ -40,7 +40,7 @@ const Messages = () => {
   }, [])
 
   useEffect(() => {
-    if (userValue?.currentUser?.role === 'admin') param = receiver?._id
+    if (userValue.currentUser?.role === 'admin') param = receiver?._id
     getMessages(param)
       .then((data) => {
         setMessages([...data?.data?.messages])
@@ -127,8 +127,6 @@ const Messages = () => {
           placeholder='Write a message'
           value={content}
           sx={{
-            border: '2px solid #fff',
-            paddingLeft: '10px',
             borderRadius: '5px',
             fontSize: '15px',
             color: '#000',

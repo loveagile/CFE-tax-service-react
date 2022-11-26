@@ -66,7 +66,7 @@ const initProfile = {
   county: '',
 }
 
-const Profile = ({}) => {
+const Profile = () => {
   const theme = useTheme()
   const [init, setInit] = useState(initProfile)
   const [value, setValue] = useState(0)
