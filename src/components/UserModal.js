@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -10,9 +10,10 @@ import {
 } from '@mui/material'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import { toast } from 'react-toastify'
 
 import { ClientContext } from '../contexts/clients'
-import { createClient, updateClient } from '../api/apiCaller'
+import { createClient, updateClient, sendEmail } from '../api/apiCaller'
 
 const validationSchema = yup.object({
   firstname: yup.string().required('Firstname is required'),
@@ -31,12 +32,32 @@ const UserModal = (props) => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       if (type === 'add') {
-        createClient(values).then((data) => {
-          value.addClient(data?.data?.user)
-        })
+        createClient(values)
+          .then(({ data }) => {
+            value.addClient(data?.user)
+            const obj = {
+              email: data?.user?.email,
+              name: data?.user?.firstname + ' ' + data?.user?.lastname,
+              message: `Your account was added successfully to CFE Tax Service.
+            Email address: ${data?.user?.email}
+            Username: ${data?.user?.username}
+            Password: 12345678`,
+            }
+            toast.success('A client was added successfully')
+            sendEmail(obj)
+              .then((res) => {
+                toast.success('An email was sent successfully')
+              })
+              .catch((error) => {
+                toast.error('An email was failed')
+              })
+          })
+          .catch((error) => {
+            toast.error('The adding user was failed')
+          })
       } else {
-        updateClient(values).then((data) => {
-          value.updateClient(data?.data?.user)
+        updateClient(values).then(({ data }) => {
+          value.updateClient(data?.user)
         })
       }
       handleCancel()
@@ -82,18 +103,18 @@ const UserModal = (props) => {
             label='Business'
             variant='standard'
             value={formik.values?.business}
-            sx={{ width: '50%' }}
+            sx={{ width: '100%', padding: '10px' }}
+            onChange={formik.handleChange}
+          />
+          <TextField
+            id='email'
+            label='Email*'
+            variant='standard'
+            value={formik.values?.email}
+            sx={{ width: '100%', padding: '10px' }}
             onChange={formik.handleChange}
           />
           <Box sx={{ display: 'flex' }}>
-            <TextField
-              id='email'
-              label='Email*'
-              variant='standard'
-              value={formik.values?.email}
-              sx={{ width: '50%', padding: '10px' }}
-              onChange={formik.handleChange}
-            />
             <TextField
               error={formik.validateField.IDNumber}
               id='IDNumber'
@@ -103,15 +124,15 @@ const UserModal = (props) => {
               sx={{ width: '50%', padding: '10px' }}
               onChange={formik.handleChange}
             />
+            <TextField
+              id='username'
+              label='Username'
+              variant='standard'
+              value={formik.values?.username}
+              sx={{ width: '50%', padding: '10px' }}
+              onChange={formik.handleChange}
+            />
           </Box>
-          <TextField
-            id='username'
-            label='Username'
-            variant='standard'
-            value={formik.values?.username}
-            sx={{ width: '50%' }}
-            onChange={formik.handleChange}
-          />
           <Divider variant='fullWidth' sx={{ padding: '5px' }} />
           <Box
             sx={{

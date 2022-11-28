@@ -4,6 +4,19 @@ import { BASE_URL } from '../config'
 
 export const login = (user) => axios.post(`${BASE_URL}/auth/login`, user)
 
+export const sendEmail = (data) => {
+  return axios.post('https://api.emailjs.com/api/v1.0/email/send', {
+    service_id: 'service_shane',
+    template_id: 'template_vigo78y',
+    user_id: 'gISgvuP8VVpIKV5oJ',
+    template_params: {
+      name: data.name,
+      email: data.email,
+      message: data.message,
+    },
+  })
+}
+
 export const getCurrentUser = () => {
   const token = localStorage.getItem('token')
   return axios.get(`${BASE_URL}/auth/currentuser`, {
