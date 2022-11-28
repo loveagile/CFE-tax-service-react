@@ -18,11 +18,6 @@ const Sidebar = () => {
   const navigate = useNavigate()
   const sides = [
     {
-      name: 'Files',
-      url: '/files',
-      icon: <InsertDriveFileIcon sx={{ color: 'white' }} />,
-    },
-    {
       name: 'Profie',
       url: '/profile',
       icon: <InsertDriveFileIcon sx={{ color: 'white' }} />,
@@ -40,7 +35,14 @@ const Sidebar = () => {
       url: '/clients',
       icon: <PeopleAltIcon sx={{ color: 'white' }} />,
     })
-  } else if (!value.currentUser || !localStorage.getItem('token')) {
+  } else {
+    sides.unshift({
+      name: 'Files',
+      url: '/files',
+      icon: <InsertDriveFileIcon sx={{ color: 'white' }} />,
+    })
+  }
+  if (!value.currentUser || !localStorage.getItem('token')) {
     return <></>
   }
 

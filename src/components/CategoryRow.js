@@ -36,7 +36,7 @@ const formatText = (str) => {
   if (str.length < 25) {
     return str
   } else {
-    return str.substring(0, 20) + '...'
+    return str.substring(0, 15) + '...'
   }
 }
 
@@ -114,6 +114,7 @@ const CategoryRow = (props) => {
       deleteCategory(row)
         .then(() => {
           setFlag(!flag)
+          toast.success('Deleted the category successfully')
         })
         .catch((err) => {
           toast.error(err.error)
@@ -122,9 +123,10 @@ const CategoryRow = (props) => {
       deleteFile(row.files[currentRow])
         .then(() => {
           setFlag(!flag)
+          toast.success('Deleted the file successfully')
         })
         .catch((err) => {
-          toast.error(err.error)
+          toast.error('Deleting the file was failed')
         })
     }
   }

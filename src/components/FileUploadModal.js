@@ -50,8 +50,9 @@ const FileUploadModal = (props) => {
     formData.append('to', userId)
 
     uploadFiles(formData)
-      .then((data) => {
-        value.addFiles(data?.data?.files)
+      .then(({ data }) => {
+        toast.success(`Uploaded ${data?.files.length} files successfully!`)
+        value.addFiles(data?.files)
         setOpen(false)
         setFlag(!flag)
       })
