@@ -60,8 +60,8 @@ const Messages = () => {
     socket.emit('send-message', data)
     socket.on('new-message', (message) => {
       getMessages(receiver?._id)
-        .then((data) => {
-          setMessages(data?.data?.messages)
+        .then(({ data }) => {
+          setMessages(data?.messages)
         })
         .catch((error) => {
           toast.error(error.message)
@@ -134,7 +134,7 @@ const Messages = () => {
             paddingLeft: '20px',
             marginLeft: '10px',
           }}
-          style={{ width: window.innerWidth - 350, fontSize: '15px' }}
+          style={{ width: '92%', fontSize: '15px' }}
           onChange={(event) => {
             setContent(event.target.value)
           }}
