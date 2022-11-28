@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles'
 import { Settings, Logout, MoreVert } from '@mui/icons-material'
 
 import { CurrentUserContext } from '../contexts/currentUser'
+import Account from '../containers/Account'
 
 const Navbar = styled(Link)`
   display: flex;
@@ -19,6 +20,7 @@ const Header = () => {
   const open = Boolean(anchorEl)
   const navigate = useNavigate()
   const value = useContext(CurrentUserContext)
+  const [account, setAccount] = useState(false)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -75,16 +77,18 @@ const Header = () => {
               >
                 <MenuItem
                   onClick={() => {
-                    navigate('/profile')
+                    setAccount(true)
+                    handleClose()
                   }}
                 >
                   <Settings sx={{ marginRight: '10px' }} />
-                  Profile
+                  Account
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
                     localStorage.removeItem('token')
                     value.createCurrentUser({})
+                    handleClose()
                     navigate('/login')
                   }}
                 >
@@ -100,6 +104,7 @@ const Header = () => {
           )}
         </Box>
       </Box>
+      <Account open={account} setOpen={setAccount} />
     </Box>
   )
 }

@@ -53,6 +53,13 @@ export const deleteDependent = (dependent) => {
   })
 }
 
+export const updateAccount = (account) => {
+  const token = localStorage.getItem('token')
+  return axios.put(`${BASE_URL}/auth/account`, account, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
 export const getClients = () => {
   const token = localStorage.getItem('token')
   return axios.get(`${BASE_URL}/users`, {
@@ -156,5 +163,9 @@ export const getMessages = (receiver) => {
       Authorization: `Bearer ${token}`,
     },
   }
-  return axios.get(`${BASE_URL}/messages/${receiver}`, config)
+  if (receiver) {
+    return axios.get(`${BASE_URL}/messages/${receiver}`, config)
+  } else {
+    return axios.get(`${BASE_URL}/messages/`, config)
+  }
 }
