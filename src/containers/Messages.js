@@ -123,7 +123,7 @@ const Messages = () => {
         ))}
       </Stack>
       <form onSubmit={(e) => handleSend(e)}>
-        <Box sx={{ display: 'flex', padding: '10px', width: '100%' }}>
+        <Box sx={{ display: 'flex', marginTop: '10px', width: '100%' }}>
           <TextField
             aria-label='input-board'
             placeholder='Write a message'
