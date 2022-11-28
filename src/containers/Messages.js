@@ -6,6 +6,7 @@ import {
   Box,
   Stack,
   TextareaAutosize,
+  TextField,
   IconButton,
   FormControl,
   InputLabel,
@@ -50,7 +51,9 @@ const Messages = () => {
       })
   }, [receiver])
 
-  const handleSend = () => {
+  const handleSend = (e) => {
+    e.preventDefault()
+
     const data = {
       sender: userValue?.currentUser?._id,
       receiver,
@@ -119,34 +122,34 @@ const Messages = () => {
           ></MessageItem>
         ))}
       </Stack>
-      <Box sx={{ display: 'flex', padding: '10px', width: '100%' }}>
-        <TextareaAutosize
-          maxRows={3}
-          minRows={2}
-          aria-label='input-board'
-          placeholder='Write a message'
-          value={content}
-          sx={{
-            borderRadius: '5px',
-            fontSize: '15px',
-            color: '#000',
-            border: '1px solid #aaa',
-            paddingLeft: '20px',
-            marginLeft: '10px',
-          }}
-          style={{ width: '92%', fontSize: '15px' }}
-          onChange={(event) => {
-            setContent(event.target.value)
-          }}
-        />
-        <IconButton
-          size='small'
-          onClick={handleSend}
-          sx={{ color: theme.palette.primary.dark, marginLeft: '20px' }}
-        >
-          <SendIcon />
-        </IconButton>
-      </Box>
+      <form onSubmit={(e) => handleSend(e)}>
+        <Box sx={{ display: 'flex', padding: '10px', width: '100%' }}>
+          <TextField
+            aria-label='input-board'
+            placeholder='Write a message'
+            value={content}
+            sx={{
+              borderRadius: '5px',
+              fontSize: '15px',
+              color: '#000',
+              paddingLeft: '20px',
+              marginLeft: '10px',
+            }}
+            style={{ width: '92%', fontSize: '15px' }}
+            onChange={(event) => {
+              setContent(event.target.value)
+            }}
+          />
+          <IconButton
+            size='small'
+            type='submit'
+            onClick={handleSend}
+            sx={{ color: theme.palette.primary.dark, marginLeft: '20px' }}
+          >
+            <SendIcon />
+          </IconButton>
+        </Box>
+      </form>
     </Box>
   )
 }
