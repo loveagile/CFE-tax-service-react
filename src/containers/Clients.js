@@ -14,6 +14,7 @@ import {
   tableCellClasses,
 } from '@mui/material'
 import { Edit, Delete, PersonAdd } from '@mui/icons-material'
+import { toast } from 'react-toastify'
 import { styled } from '@mui/material/styles'
 
 import { deleteClient, getClients } from '../api/apiCaller'
@@ -87,8 +88,11 @@ const Clients = () => {
     deleteClient(id)
       .then(() => {
         setRender(!render)
+        toast.success('Deleted the user successfully.')
       })
-      .catch(() => {})
+      .catch((error) => {
+        toast.error('Deleting the user was failed')
+      })
     setConfirm(false)
   }
 
