@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -9,11 +9,13 @@ import {
   Divider,
 } from '@mui/material'
 import { useFormik } from 'formik'
+import emailjs from '@emailjs/browser'
 import * as yup from 'yup'
 import { toast } from 'react-toastify'
 
 import { ClientContext } from '../contexts/clients'
-import { createClient, updateClient, sendEmail } from '../api/apiCaller'
+import { createClient, updateClient } from '../api/apiCaller'
+import { YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, YOUR_PUBLIC_KEY } from '../config'
 
 const validationSchema = yup.object({
   firstname: yup.string().required('Firstname is required'),
@@ -25,7 +27,13 @@ const validationSchema = yup.object({
 
 const UserModal = (props) => {
   const { open, setOpen, user, type } = props
+  const [current, setCurrent] = useState()
+  const form = useRef()
   const value = useContext(ClientContext)
+
+  useEffect(() => {
+    setCurrent(form.current)
+  }, [form.current])
 
   const formik = useFormik({
     initialValues: user,
@@ -44,7 +52,13 @@ const UserModal = (props) => {
             Password: 12345678`,
             }
             toast.success('A client was added successfully')
-            sendEmail(obj)
+            emailjs
+              .sendForm(
+                YOUR_SERVICE_ID,
+                YOUR_TEMPLATE_ID,
+                current,
+                YOUR_PUBLIC_KEY
+              )
               .then((res) => {
                 toast.success('An email was sent successfully')
               })
@@ -78,7 +92,7 @@ const UserModal = (props) => {
         {type === 'add' ? 'Add a client' : 'Edit a client'}
       </DialogTitle>
       <DialogContent>
-        <form onSubmit={formik.handleSubmit}>
+        <form ref={form} onSubmit={formik.handleSubmit}>
           <Box sx={{ display: 'flex' }}>
             <TextField
               name='firstname'
