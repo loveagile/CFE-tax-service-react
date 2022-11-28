@@ -33,15 +33,25 @@ export const CategoriesProvider = ({ children }) => {
   }
 
   const updateCategory = (data) => {
-    const category = data?.data?.category || { _id: '', name: '' }
-    let list = categories.map((item) =>
-      item._id === category._id ? category : item
-    )
+    const category = data?.category || { _id: '', name: '' }
+    let list = categories.map((item) => {
+      if (item._id === category._id) {
+        const updated = item
+        Object.assign(updated, { name: category.name })
+        return updated
+      }
+      return item
+    })
     setCategories(list)
     list = []
-    list = filesByFrom.map((item) =>
-      item._id === category._id ? category : item
-    )
+    list = filesByFrom.map((item) => {
+      if (item._id === category._id) {
+        const updated = item
+        Object.assign(updated, { name: category.name })
+        return updated
+      }
+      return item
+    })
     setFilesByFrom(list)
   }
 
