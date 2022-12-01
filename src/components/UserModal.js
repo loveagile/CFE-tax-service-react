@@ -9,12 +9,12 @@ import {
   Divider,
 } from '@mui/material'
 import { useFormik } from 'formik'
-import emailjs from '@emailjs/browser'
+import emailjs from 'emailjs-com'
 import * as yup from 'yup'
 import { toast } from 'react-toastify'
 
 import { ClientContext } from '../contexts/clients'
-import { createClient, updateClient } from '../api/apiCaller'
+import { createClient, updateClient, sendEmail } from '../api/apiCaller'
 import { YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, YOUR_PUBLIC_KEY } from '../config'
 
 const validationSchema = yup.object({
@@ -27,7 +27,7 @@ const validationSchema = yup.object({
 
 const UserModal = (props) => {
   const { open, setOpen, user, type } = props
-  const [current, setCurrent] = useState()
+  const [current, setCurrent] = useState({})
   const form = useRef()
   const value = useContext(ClientContext)
 
@@ -51,20 +51,21 @@ const UserModal = (props) => {
             Username: ${data?.user?.username}
             Password: 12345678`,
             }
-            toast.success('A client was added successfully')
-            emailjs
-              .sendForm(
-                YOUR_SERVICE_ID,
-                YOUR_TEMPLATE_ID,
-                current,
-                YOUR_PUBLIC_KEY
-              )
-              .then((res) => {
-                toast.success('An email was sent successfully')
-              })
-              .catch((error) => {
-                toast.error('An email was failed')
-              })
+            // console.log('current', current)
+            // toast.success('A client was added successfully')
+            // emailjs
+            //   .sendForm(
+            //     YOUR_SERVICE_ID,
+            //     YOUR_TEMPLATE_ID,
+            //     current,
+            //     YOUR_PUBLIC_KEY
+            //   )
+            //   .then((res) => {
+            //     toast.success('An email was sent successfully')
+            //   })
+            //   .catch((error) => {
+            //     toast.error('An email was failed')
+            //   })
           })
           .catch((error) => {
             toast.error('The adding user was failed')
@@ -86,8 +87,58 @@ const UserModal = (props) => {
     setOpen(false)
   }
 
+  function handleEmail(e) {
+    e.preventDefault() //This is important, i'm not sure why, but the email won't send without it
+
+    console.log('submit', e.target.email.value)
+    // sendEmail({
+    //   email: e.target.email.value,
+    //   firstname: e.target.firstname.value,
+    //   lastname: e.target.lastname.value,
+    //   username: e.target.username.value,
+    // })
+    //   .then((result) => {
+    //     console.log('success', result)
+    //   })
+    //   .catch((error) => {
+    //     console.error('error', error)
+    //   })
+    emailjs
+      .send(
+        YOUR_SERVICE_ID,
+        YOUR_TEMPLATE_ID,
+        {
+          email: e.target.email.value,
+          firstname: e.target.firstname.value,
+          lastname: e.target.lastname.value,
+          username: e.target.username.value,
+        },
+        YOUR_PUBLIC_KEY
+      )
+      .then(
+        (result) => {
+          console.log('result', result)
+          window.location.reload() //This is if you still want the page to reload (since e.preventDefault() cancelled that behavior)
+        },
+        (error) => {
+          console.log(error.text)
+        }
+      )
+  }
   return (
     <Dialog open={open} onClose={handleCancel}>
+      <form className='contact-form' onSubmit={handleEmail}>
+        <input type='hidden' name='contact_number' />
+        <label>firstname</label>
+        <input type='text' name='firstname' />
+        <label>lastname</label>
+        <input type='text' name='lastname' />
+        <label>Email</label>
+        <input type='email' name='email' />
+        <label>username</label>
+        <input type='text' name='username' />
+        <input type='submit' value='Send' />
+      </form>
       <DialogTitle sx={{ margin: 'auto' }}>
         {type === 'add' ? 'Add a client' : 'Edit a client'}
       </DialogTitle>

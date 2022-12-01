@@ -1,18 +1,25 @@
 import axios from 'axios'
 
-import { BASE_URL } from '../config'
+import {
+  BASE_URL,
+  YOUR_SERVICE_ID,
+  YOUR_TEMPLATE_ID,
+  YOUR_PUBLIC_KEY,
+} from '../config'
 
 export const login = (user) => axios.post(`${BASE_URL}/auth/login`, user)
 
 export const sendEmail = (data) => {
   return axios.post('https://api.emailjs.com/api/v1.0/email/send', {
-    service_id: 'service_shane',
-    template_id: 'template_vigo78y',
-    user_id: 'gISgvuP8VVpIKV5oJ',
+    lib_version: '3.10.0',
+    service_id: YOUR_SERVICE_ID,
+    template_id: YOUR_TEMPLATE_ID,
+    user_id: YOUR_PUBLIC_KEY,
     template_params: {
-      name: data.name,
-      email: data.email,
-      message: data.message,
+      email: data?.email,
+      firstname: data?.lastname,
+      lastname: data?.lastname,
+      username: data?.username,
     },
   })
 }
