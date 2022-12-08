@@ -1,4 +1,5 @@
 export const BASE_URL = `https://cfe-tax-backend.herokuapp.com/api`
+export const SERVER = `https://cfe-tax-backend.herokuapp.com/`
 
 export const YOUR_SERVICE_ID = 'service_shane'
 export const YOUR_TEMPLATE_ID = 'template_vigo78y'
