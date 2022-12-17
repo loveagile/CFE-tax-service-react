@@ -43,7 +43,7 @@ const UserModal = (props) => {
         createClient(values)
           .then(({ data }) => {
             value.addClient(data?.user)
-            toast.success('A client was added successfully')
+            toast.success('A client has been added successfully')
             emailjs
               .send(
                 YOUR_SERVICE_ID,
@@ -53,6 +53,7 @@ const UserModal = (props) => {
                   firstname: data?.user?.firstname,
                   lastname: data?.user?.lastname,
                   username: data?.user?.username,
+                  password: '12345678',
                 },
                 YOUR_PUBLIC_KEY
               )
@@ -66,7 +67,9 @@ const UserModal = (props) => {
               )
           })
           .catch((error) => {
-            toast.error('The adding user was failed')
+            toast.error(
+              error?.response?.data?.error || 'The adding user was failed'
+            )
           })
       } else {
         updateClient(values).then(({ data }) => {
