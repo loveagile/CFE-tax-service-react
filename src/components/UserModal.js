@@ -68,14 +68,22 @@ const UserModal = (props) => {
           })
           .catch((error) => {
             toast.error(
-              error?.response?.data?.error || 'The adding user was failed'
+              error?.response?.data?.error || 'The adding client was failed'
             )
           })
       } else {
-        updateClient(values).then(({ data }) => {
-          value.updateClient(data?.user)
-        })
+        updateClient(values)
+          .then(({ data }) => {
+            value.updateClient(data?.user)
+            toast.success('The client has been updated successfully')
+          })
+          .catch((error) => {
+            toast.error(
+              error?.response?.data?.error || 'The updating client was failed'
+            )
+          })
       }
+      formik.setValues(user)
       handleCancel()
     },
   })
