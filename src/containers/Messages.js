@@ -5,7 +5,6 @@ import socketClient from 'socket.io-client'
 import {
   Box,
   Stack,
-  TextareaAutosize,
   TextField,
   IconButton,
   FormControl,
