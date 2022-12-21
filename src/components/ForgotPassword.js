@@ -38,7 +38,7 @@ const ForgotPassowrd = () => {
               FORGOT_TEMPLATE_ID,
               {
                 from: FROM_EMAIL,
-                to: email,
+                to: data?.email,
                 link: data?.link,
               },
               YOUR_PUBLIC_KEY
