@@ -2,6 +2,7 @@ import axios from 'axios'
 
 import {
   BASE_URL,
+  EMAIL_SERVER,
   YOUR_SERVICE_ID,
   YOUR_TEMPLATE_ID,
   YOUR_PUBLIC_KEY,
@@ -9,8 +10,12 @@ import {
 
 export const login = (user) => axios.post(`${BASE_URL}/auth/login`, user)
 
+export const forgotPassword = ({ email, userid }) => {
+  return axios.post(`${BASE_URL}/auth/forgotpassword`, { email, userid })
+}
+
 export const sendEmail = (data) => {
-  return axios.post('https://api.emailjs.com/api/v1.0/email/send', {
+  return axios.post(EMAIL_SERVER, {
     lib_version: '3.10.0',
     service_id: YOUR_SERVICE_ID,
     template_id: YOUR_TEMPLATE_ID,
