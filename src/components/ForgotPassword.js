@@ -38,23 +38,20 @@ const ForgotPassowrd = () => {
               FORGOT_TEMPLATE_ID,
               {
                 from: FROM_EMAIL,
+                to: email,
                 link: data?.link,
               },
               YOUR_PUBLIC_KEY
             )
-            .then(
-              (result) => {
-                toast.success('Please check your email')
-              },
-              (error) => {
-                toast.error('Sending an email was failed')
-              }
-            )
+            .then((result) => {
+              toast.success('Please check your email')
+            })
+            .catch((error) => {
+              toast.error('Sending an email was failed')
+            })
         })
         .catch((error) => {
-          toast.error(
-            error?.message || 'Sending reset password link was failed'
-          )
+          toast.error(error?.message || "Can't find the email and user ID")
         })
     },
   })
