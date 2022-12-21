@@ -2,10 +2,17 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Card, TextField, Typography } from '@mui/material'
 import { useFormik } from 'formik'
+import emailjs from 'emailjs-com'
 import * as yup from 'yup'
+import { toast } from 'react-toastify'
 
 import { forgotPassword } from '../api/apiCaller'
-import { toast } from 'react-toastify'
+import {
+  YOUR_SERVICE_ID,
+  FORGOT_TEMPLATE_ID,
+  YOUR_PUBLIC_KEY,
+  FROM_EMAIL,
+} from '../config'
 
 const validationSchema = yup.object({
   email: yup
@@ -25,7 +32,24 @@ const ForgotPassowrd = () => {
       const { email, userid } = values
       forgotPassword({ email, userid })
         .then(({ data }) => {
-          console.log('success: forgot password')
+          emailjs
+            .send(
+              YOUR_SERVICE_ID,
+              FORGOT_TEMPLATE_ID,
+              {
+                from: FROM_EMAIL,
+                link: data?.link,
+              },
+              YOUR_PUBLIC_KEY
+            )
+            .then(
+              (result) => {
+                toast.success('Please check your email')
+              },
+              (error) => {
+                toast.error('Sending an email was failed')
+              }
+            )
         })
         .catch((error) => {
           toast.error(
