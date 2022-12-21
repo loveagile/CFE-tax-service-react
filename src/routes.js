@@ -10,11 +10,13 @@ import { CurrentUserContext } from './contexts/currentUser'
 import { CategoriesProvider } from './contexts/categories'
 import { MessageProvider } from './contexts/messages'
 import { ClientProvider } from './contexts/clients'
+import ForgotPassowrd from './components/ForgotPassword'
 
 const AuthRouter = () => {
   return (
     <Routes>
       <Route path='/login' element={<Login />} />
+      <Route path='/forgotpassword' element={<ForgotPassowrd />} />
       <Route path='/' element={<Login />} />
     </Routes>
   )

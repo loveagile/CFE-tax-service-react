@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Box,
   Card,
@@ -20,8 +20,8 @@ import { CurrentUserContext } from '../contexts/currentUser'
 
 const AuthInput = styled(TextField)`
   display: flex;
-  padding: 20px;
-  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
 `
 
 const validationSchema = yup.object({
@@ -111,11 +111,14 @@ const Login = () => {
                   fullWidth
                   variant='contained'
                   type='submit'
-                  sx={{ marginTop: 3 }}
+                  sx={{ marginTop: 3, marginBottom: 3 }}
                 >
                   <ExitToApp sx={{ marginRight: 1 }} />
                   Login
                 </Button>
+                <Link className='flex justify-end' to='/forgotpassword'>
+                  Reset password
+                </Link>
               </form>
             </Box>
           </Grid>
