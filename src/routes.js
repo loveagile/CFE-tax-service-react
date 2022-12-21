@@ -11,12 +11,14 @@ import { CategoriesProvider } from './contexts/categories'
 import { MessageProvider } from './contexts/messages'
 import { ClientProvider } from './contexts/clients'
 import ForgotPassowrd from './components/ForgotPassword'
+import ResetPassword from './components/ResetPassword'
 
 const AuthRouter = () => {
   return (
     <Routes>
       <Route path='/login' element={<Login />} />
       <Route path='/forgotpassword' element={<ForgotPassowrd />} />
+      <Route path='/reset/:token' element={<ResetPassword />} />
       <Route path='/' element={<Login />} />
     </Routes>
   )

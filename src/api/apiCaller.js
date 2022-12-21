@@ -14,6 +14,14 @@ export const forgotPassword = ({ email, userid }) => {
   return axios.post(`${BASE_URL}/auth/forgotpassword`, { email, userid })
 }
 
+export const getResetToken = (token) => {
+  return axios.get(`${BASE_URL}/auth/reset/${token}`)
+}
+
+export const updatePassword = (id, password) => {
+  return axios.put(`${BASE_URL}/auth/updatepassword/${id}`, { password })
+}
+
 export const sendEmail = (data) => {
   return axios.post(EMAIL_SERVER, {
     lib_version: '3.10.0',
