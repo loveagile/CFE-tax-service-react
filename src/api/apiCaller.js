@@ -10,8 +10,8 @@ import {
 
 export const login = (user) => axios.post(`${BASE_URL}/auth/login`, user)
 
-export const forgotPassword = ({ email, userid }) => {
-  return axios.post(`${BASE_URL}/auth/forgotpassword`, { email, userid })
+export const forgotPassword = ({ type, param }) => {
+  return axios.post(`${BASE_URL}/auth/forgotpassword`, { type, param })
 }
 
 export const getResetToken = (token) => {

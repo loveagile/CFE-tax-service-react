@@ -8,11 +8,19 @@ import { toast } from 'react-toastify'
 import { getResetToken, updatePassword } from '../api/apiCaller'
 
 const validationSchema = yup.object({
-  password: yup.string().required('Password is required'),
+  password: yup
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .required('Password is a required field'),
+  confirm: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'Passwords must match')
+    .required('Password confirm is a required field'),
 })
 
 const initialValues = {
   password: '',
+  confirm: '',
 }
 
 const ResetPassword = () => {
@@ -89,6 +97,36 @@ const ResetPassword = () => {
               sx={{ width: '100%', marginBottom: 3 }}
               onChange={formik.handleChange}
             />
+            <Typography
+              sx={{
+                display: 'flex',
+                justifyContent: 'start',
+                fontSize: '12px',
+                width: '100%',
+                color: 'red',
+              }}
+            >
+              {formik.touched.password && formik.errors.password}
+            </Typography>
+            <TextField
+              id='confirm'
+              type='password'
+              label='Password Confirm'
+              variant='standard'
+              sx={{ width: '100%', marginBottom: 3 }}
+              onChange={formik.handleChange}
+            />
+            <Typography
+              sx={{
+                display: 'flex',
+                justifyContent: 'start',
+                fontSize: '12px',
+                width: '100%',
+                color: 'red',
+              }}
+            >
+              {formik.touched.confirm && formik.errors.confirm}
+            </Typography>
             <Button
               fullWidth
               variant='contained'
