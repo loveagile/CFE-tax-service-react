@@ -84,7 +84,7 @@ const UserModal = (props) => {
                   email: data?.user?.email,
                   firstname: data?.user?.firstname,
                   lastname: data?.user?.lastname,
-                  username: data?.user?.username,,
+                  username: data?.user?.username,
                 },
                 YOUR_PUBLIC_KEY
               )
