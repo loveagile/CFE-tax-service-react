@@ -76,6 +76,26 @@ const UserModal = (props) => {
           .then(({ data }) => {
             value.updateClient(data?.user)
             toast.success('The client has been updated successfully')
+            emailjs
+              .send(
+                YOUR_SERVICE_ID,
+                YOUR_TEMPLATE_ID,
+                {
+                  email: data?.user?.email,
+                  firstname: data?.user?.firstname,
+                  lastname: data?.user?.lastname,
+                  username: data?.user?.username,
+                },
+                YOUR_PUBLIC_KEY
+              )
+              .then(
+                (result) => {
+                  toast.success('An email was sent successfully')
+                },
+                (error) => {
+                  toast.error('Sending an email was failed')
+                }
+              )
           })
           .catch((error) => {
             toast.error(

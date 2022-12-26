@@ -57,7 +57,7 @@ const Login = () => {
           }
         })
         .catch((err) => {
-          toast.error(err.error)
+          toast.error(err?.error || 'Username or password was wrong')
         })
     },
   })
